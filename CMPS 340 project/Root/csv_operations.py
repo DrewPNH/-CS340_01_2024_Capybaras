@@ -1,48 +1,48 @@
 #module begins
-module_name = 'csv_operations'
+module_name = 'passenger'
+
+'''
+Version: 1.0
+
+Description:
+    This is the parent class for passenger, where the data is imported
+
+Authors:
+    Drew Hutchinson, Rex Liner
+
+Date Created     :  11-11-2024
+Date Last Updated:  11-13-2024
+
+Doc:
+    Uses pandas, seaborn, and matplotlib
+
+Notes:
+    This is only for inputting/importing data
+'''
 
 #imports
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-#custom imports
-import config
-
-class csv_operations:
+class passenger:
     def __init__(self, file_name=None):
-        self.file_name = file_name
+        self.file_name = file_name  
+        self.data_df = None  
+        #Initialize with file name.
 
-class csv_operations_child(csv_operations):
-    def __init__(self, file_name=None):
-        super().__init__(file_name)
-        self.data = pd.read_csv(f'./Input/{self.file_name}')
-
-    def Violin(self, column):
-        sns.violinplot(x=column, data=self.data[[column]])
-        plt.show()
-    def Whisker_Box(self, column):
-        sns.boxplot(x=column, data=self.data[column])
-        plt.show()
-    def Scatter(self, column):
-        sns.scatterplot(x=column, data=self.data[column])
-        plt.show()
+    def load_data(self):
         
-
-def main():
-    child = csv_operations_child(config.file_name)
-    print(child.data)
-
-    print("How would you like to graph this data.")
-    print("1. Violin Plot")
-    print("2. Whisker box plot")
-    print("3. Scatter plot")
-    choice = input()
-    
-    if (choice == '1'):
-        print("Now input the name of the column that you would like to graph.")
-        column = input()
-        child.Violin(column)
+        if self.file_name:
+            try:
+               
+                self.data_df = pd.read_csv(f'./Input/{self.file_name}')
+                print(f"Data loaded successfully from {self.file_name}")
+            except FileNotFoundError:
+                print("File not found. Please verify the file path.")
+        else:
+            print("No file name provided.")
+            #Load data from CSV to DataFrame.
 
 if __name__ == "__main__":
     print(f"\"{module_name}\" module begins.")
