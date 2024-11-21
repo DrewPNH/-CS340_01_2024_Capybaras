@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 #custom imports
 
 
-class csv_operations:
+class csv_operations_primary:
     #store config into a dictionary, make a histogram for distributions and a line plot for numerical data, and query data for searching
     def __init__(self, file_name):
         self.file_name = file_name
@@ -41,7 +41,7 @@ class csv_operations:
         print(self.data[self.data[column] == int(search_value)])
     #
 #
-class csv_operations_child(csv_operations):
+class csv_operations_secondary(csv_operations_primary):
     def __init__(self, file_name=None):
         super().__init__(file_name)
         self.data = pd.read_csv(f'./Input/{self.file_name}')
@@ -61,16 +61,16 @@ class csv_operations_child(csv_operations):
 #    
 
 def main(config):
-    parent = csv_operations(config.file_name)
-    child = csv_operations_child(config.file_name)
-    parent.histogram(config.column)
-    child.Violin(config.column)
-    child.Whisker_Box(config.column)
+    primary = csv_operations_primary(config.file_name)
+    seconday = csv_operations_secondary(config.file_name)
+    primary.histogram(config.column)
+    seconday.Violin(config.column)
+    seconday.Whisker_Box(config.column)
     if config.secondcol != None:
-        child.Scatter(config.column, config.secondcol)
+        seconday.Scatter(config.column, config.secondcol)
     #
     if config.search_value != None:
-        parent.search(config.column, config.search_value)
+        primary.search(config.column, config.search_value)
     #
 #
 
