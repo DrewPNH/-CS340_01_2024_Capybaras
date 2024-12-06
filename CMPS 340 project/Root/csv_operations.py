@@ -10,7 +10,7 @@ Authors:
     Drew Hutchinson, Rex Liner
 
 Date Created     :  11-11-2024
-Date Last Updated:  11-20-2024
+Date Last Updated:  12-5-2024
 
 Doc:
     Uses pandas, seaborn, and matplotlib
@@ -25,52 +25,77 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 #custom imports
-
+import config
 
 class csv_operations_primary:
     #store config into a dictionary, make a histogram for distributions and a line plot for numerical data, and query data for searching
-    def __init__(self, file_name):
-        self.file_name = file_name
+    config = {
+        'file_name': config.file_name,
+        'secondcol': config.secondcol,
+        'column': config.column,
+        'search_vallue': config.column,
+    }
+    def update_config(self, file_name=None, column=None, secondcol=None, search_value=None):
+        if file_name is not None:
+            self.config['file_name'] = file_name
+        if secondcol is not None:
+            self.config['secondcol'] = secondcol
+        if column is not None:
+            self.config['column'] = column
+        if search_value is not None:
+            self.config['search_value'] = search_value
+        return config
+    #
+    def __init__(self):
+        self.file_name = self.config['file_name']
         self.data = pd.read_csv(f'./Input/{self.file_name}')
     #
-    def histogram(self, column):
-        sns.histplot(x=column, data=self.data[[column]])
+    def histogram(self):
+        sns.histplot(x=self.config['column'], data=self.data[[self.config['column']]])
         plt.show()
     #
-    def search(self, column, search_value):
-        print(self.data[self.data[column] == int(search_value)])
+    def line_plot(self):
+        sns.lineplot(x=self.config['column'], y=self.config['secondcol'], data=self.data)
+        plt.show()
+    #
+    def search(self):
+            result = self.data[self.data[self.config['column']] == int(self.config['search_value'])]
+            print(result)
     #
 #
+
 class csv_operations_secondary(csv_operations_primary):
-    def __init__(self, file_name=None):
-        super().__init__(file_name)
-        self.data = pd.read_csv(f'./Input/{self.file_name}')
+    def __init__(self):
+        super().__init__()
+        self.data = pd.read_csv(f'./Input/{self.config['file_name']}')
     #
-    def Violin(self, column):
-        sns.violinplot(x=column, data=self.data[[column]])
+    def Violin(self):
+        sns.violinplot(x=self.config['column'], data=self.data[[self.config['column']]])
         plt.show()
     #
-    def Whisker_Box(self, column):
-        sns.boxplot(x=column, data=self.data[[column]])
+    def Whisker_Box(self):
+        sns.boxplot(x=self.config['column'], data=self.data[[self.config['column']]])
         plt.show()
     #
-    def Scatter(self, column, column2=None):
-        sns.scatterplot(x=column, y=column2, data=self.data)
+    def Scatter(self):
+        sns.scatterplot(x=self.config['column'], y=self.config['secondcol'], data=self.data)
         plt.show()
     #
 #    
 
-def main(config):
-    primary = csv_operations_primary(config.file_name)
-    seconday = csv_operations_secondary(config.file_name)
-    primary.histogram(config.column)
-    seconday.Violin(config.column)
-    seconday.Whisker_Box(config.column)
-    if config.secondcol != None:
-        seconday.Scatter(config.column, config.secondcol)
+def main(file_name=None, column=None, secondcol=None, search_value=None):
+    primary = csv_operations_primary()
+    secondary = csv_operations_secondary()
+    primary.update_config(file_name, column, secondcol, search_value)
+    primary.histogram()
+    secondary.Violin()
+    secondary.Whisker_Box()
+    if secondcol != None:
+        secondary.Scatter()
+        primary.line_plot()
     #
-    if config.search_value != None:
-        primary.search(config.column, config.search_value)
+    if search_value != None:
+        primary.search()
     #
 #
 

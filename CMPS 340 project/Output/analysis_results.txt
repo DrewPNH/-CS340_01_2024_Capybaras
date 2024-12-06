@@ -1,0 +1,3 @@
+Dot Product: 897.0
+Angle between vectors: 1.6973023311053934 degrees
+Orthogonality: False
